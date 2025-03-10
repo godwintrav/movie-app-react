@@ -13,7 +13,10 @@ const database = new Databases(client);
 export const updateSearchCount = async (searchTerm, movie) => {
     try {
         const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-            Query.equal('searchTerm', searchTerm),
+            Query.or([
+                Query.equal('searchTerm', searchTerm),
+                Query.equal('poster_url', `https://image.tmdb.org/t/p/w500/${movie.poster_path}`),
+            ])
         ])
 
         if(result.documents.length > 0){
